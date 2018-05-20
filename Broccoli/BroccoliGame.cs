@@ -114,9 +114,6 @@ namespace Broccoli
 
 		protected override async void Update(GameTime gameTime)
 		{
-			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-				Exit();
-
 			// Update inbput before everything else so we get no input lag (by one frame. ok.)
 			_input.Update();
 
@@ -162,7 +159,11 @@ namespace Broccoli
 			// Debug data.
 			spriteBatch.Begin();
 			var sb = new StringBuilder();
-			sb.AppendLine($"Input data: X Axis: {_input.XAxis}, Y Axis: {_input.YAxis}, etc");
+			sb.AppendLine("Input data");
+			sb.AppendLine($"X Axis: {_input.XAxis}, Y Axis: {_input.YAxis}");
+			sb.AppendLine($"Start: {_input.Start}, Select: {_input.Select}");
+			sb.AppendLine($"Atk1: {_input.Attack1}, Atk2: {_input.Attack2}");
+			sb.AppendLine($"Jump: {_input.Jump}, Block: {_input.Block}, Dash: {_input.Dash}");
 
 			spriteBatch.DrawString(_debugfont, sb.ToString(), new Vector2(3, 3), Color.ForestGreen);
             spriteBatch.End();
