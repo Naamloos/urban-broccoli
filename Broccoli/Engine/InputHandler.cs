@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Broccoli.Engine.Entities;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
@@ -23,9 +24,11 @@ namespace Broccoli.Engine
 		public bool Attack2 { get; internal set; } = false;
 		public bool Block { get; internal set; } = false;
 
-		public InputHandler()
-		{
+		private Keybinds _keybinds;
 
+		public InputHandler(Keybinds keybinds)
+		{
+			this._keybinds = keybinds;
 		}
 
 		public void Update()
@@ -35,20 +38,20 @@ namespace Broccoli.Engine
 
 			// Axis controls
 
-			if (ks.IsKeyDown(Keys.Up) && ks.IsKeyDown(Keys.Down))
+			if (ks.IsKeyDown(_keybinds.Up) && ks.IsKeyDown(_keybinds.Down))
 				YAxis = 0; // If both are pressed, they cancel out and Y is 0
-			else if (ks.IsKeyDown(Keys.Down))
+			else if (ks.IsKeyDown(_keybinds.Down))
 				YAxis = 1; // Down sets Y to 1
-			else if (ks.IsKeyDown(Keys.Up))
+			else if (ks.IsKeyDown(_keybinds.Up))
 				YAxis = -1; // Up sets Y to -1
 			else
 				YAxis = 0; // Else, nothing.
 
-			if (ks.IsKeyDown(Keys.Left) && ks.IsKeyDown(Keys.Right))
+			if (ks.IsKeyDown(_keybinds.Left) && ks.IsKeyDown(_keybinds.Right))
 				XAxis = 0; // If both are pressed, they cancel out and X is 0
-			else if (ks.IsKeyDown(Keys.Left))
+			else if (ks.IsKeyDown(_keybinds.Left))
 				XAxis = -1; // Left sets X to -1
-			else if (ks.IsKeyDown(Keys.Right))
+			else if (ks.IsKeyDown(_keybinds.Right))
 				XAxis = 1; // Right sets X to 1
 			else
 				XAxis = 0; // Else, nothing.

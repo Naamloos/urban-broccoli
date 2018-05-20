@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System;
 using Broccoli.Engine;
 using System.Text;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace Broccoli
 {
@@ -89,7 +91,20 @@ namespace Broccoli
 		    _remoteEntities = new List<RemoteGameObject>();
             _camera = new Camera();
 			_debugfont = Content.Load<SpriteFont>("Fonts/debug");
-			_input = new InputHandler();
+
+			// Load keybinds from a file (if exists, else create file)
+			Keybinds kb;
+			if (File.Exists("keybinds.json"))
+			{
+				kb = JsonConvert.DeserializeObject<Keybinds>(File.ReadAllText("keybinds.json"));
+			}
+			else
+			{
+				kb = new Keybinds();
+				File.Create("keybinds.json").Close();
+				File.WriteAllText("keybinds.json", JsonConvert.SerializeObject(kb));
+			}
+			_input = new InputHandler(kb);
         }
 
 		protected override void UnloadContent()
