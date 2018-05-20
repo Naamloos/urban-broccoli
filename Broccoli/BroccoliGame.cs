@@ -46,7 +46,7 @@ namespace Broccoli
 
         protected override void Initialize()
         {
-            Fullscreen(false);
+			Fullscreen(false);
             ScreenHeight = GraphicsDevice.Viewport.Height;
             ScreenWidth = GraphicsDevice.Viewport.Width;
 
@@ -72,8 +72,8 @@ namespace Broccoli
 
         private void Fullscreen(bool fullscreen)
         {
-            graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
-            graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
+            graphics.PreferredBackBufferWidth = 1600;
+            graphics.PreferredBackBufferHeight = 900;
             graphics.IsFullScreen = fullscreen;
             graphics.ApplyChanges();
             ScreenHeight = GraphicsDevice.Viewport.Height;

@@ -56,7 +56,7 @@ namespace Broccoli.Engine
 			if (gs.ThumbSticks.Left.X != 0)
 				XAxis = gs.ThumbSticks.Left.X;
 			if (gs.ThumbSticks.Left.Y != 0)
-				YAxis = gs.ThumbSticks.Left.Y;
+				YAxis = gs.ThumbSticks.Left.Y * -1f;
 		}
 	}
 }
