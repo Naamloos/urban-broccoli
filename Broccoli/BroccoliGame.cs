@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System;
 using Broccoli.Engine;
+using System.Text;
 
 namespace Broccoli
 {
@@ -15,6 +16,10 @@ namespace Broccoli
         
         public static int ScreenWidth;
         public static int ScreenHeight;
+
+		SpriteFont _debugfont;
+
+		InputHandler _input;
 
         /// <summary>
         /// Client-only entities such as props
@@ -80,6 +85,8 @@ namespace Broccoli
 		    _clientEntities = new List<GameObject>();
 		    _remoteEntities = new List<RemoteGameObject>();
             _camera = new Camera();
+			_debugfont = Content.Load<SpriteFont>("Fonts/debug");
+			_input = new InputHandler();
         }
 
 		protected override void UnloadContent()
@@ -91,6 +98,9 @@ namespace Broccoli
 		{
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
+
+			// Update inbput before everything else so we get no input lag (by one frame. ok.)
+			_input.Update();
 
             // tell server to send remote entities (send our remote entity ids)
             // server sends remote entities
@@ -129,6 +139,14 @@ namespace Broccoli
 		    {
 		        ent.Draw(gameTime, spriteBatch);
 		    }
+			spriteBatch.End();
+
+			// Debug data.
+			spriteBatch.Begin();
+			var sb = new StringBuilder();
+			sb.AppendLine($"Input data: X Axis: {_input.XAxis}, Y Axis: {_input.YAxis}, etc");
+
+			spriteBatch.DrawString(_debugfont, sb.ToString(), new Vector2(3, 3), Color.ForestGreen);
             spriteBatch.End();
 
             base.Draw(gameTime);

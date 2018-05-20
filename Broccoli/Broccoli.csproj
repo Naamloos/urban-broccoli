@@ -47,6 +47,7 @@
     <Compile Include="Engine\Entities\Player.cs" />
     <Compile Include="BroccoliGame.cs" />
     <Compile Include="Engine\Entities\RemoteGameObject.cs" />
+    <Compile Include="Engine\InputHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
