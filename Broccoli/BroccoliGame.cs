@@ -46,15 +46,18 @@ namespace Broccoli
 
         protected override void Initialize()
         {
-            Fullscreen(true);
+            Fullscreen(false);
             ScreenHeight = GraphicsDevice.Viewport.Height;
             ScreenWidth = GraphicsDevice.Viewport.Width;
 
-            Window.IsBorderless = true;
+            Window.IsBorderless = false;
 
-            Activated += Game1_Activated;
+			#if !DEBUG
+			Activated += Game1_Activated;
             Deactivated += Game1_Deactivated;
-            base.Initialize();
+			#endif
+			// Nicer to work windowed when developing..
+			base.Initialize();
         }
 
         private void Game1_Deactivated(object sender, EventArgs e)
