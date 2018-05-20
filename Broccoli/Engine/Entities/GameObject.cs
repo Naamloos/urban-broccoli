@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,18 +10,26 @@ namespace Broccoli.Engine.Entities
 {
 	public class GameObject
 	{
-		public float Width;
-		public float Height;
-		public Rectangle HitBox { get { return new Rectangle((int)X, (int)Y, (int)Width, (int)Height); } }
-		public float X;
-		public float Y;
+        public Vector2 Position;
+        public Vector2 Velocity;
+        public Texture2D Texture;
+        public bool Collision;
+		public virtual Rectangle HitBox { get { return new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height); } }
 
-		public GameObject(float width, float height)
-		{
-			this.Width = width;
-			this.Height = height;
-			this.X = 0;
-			this.Y = 0;
-		}
-	}
+        public GameObject(Texture2D texture)
+        {
+            Texture = texture;
+            Collision = true;
+        }
+
+        public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(Texture,HitBox,Color.White);
+        }
+
+        public virtual void Update(GameTime gameTime, List<GameObject> entities)
+        {
+
+        }
+    }
 }
