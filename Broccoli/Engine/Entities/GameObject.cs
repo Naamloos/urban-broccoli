@@ -14,9 +14,9 @@ namespace Broccoli.Engine.Entities
         public Vector2 Velocity;
         public Texture2D Texture;
         public bool Collision;
-		public virtual Rectangle HitBox { get { return new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height); } }
+		public virtual Rectangle HitBox => new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height);
 
-        public GameObject(Texture2D texture)
+	    public GameObject(Texture2D texture)
         {
             Texture = texture;
             Collision = true;

@@ -21,8 +21,8 @@ namespace Broccoli.Engine
                 -target.Position.Y - (target.HitBox.Height / 2),
                 0);
             var offset = Matrix.CreateTranslation(
-                Game1.ScreenWidth / 2,
-                Game1.ScreenHeight / 2,
+                BroccoliGame.ScreenWidth / 2,
+                BroccoliGame.ScreenHeight / 2,
                 0);
             Transform = pos * offset;
         }

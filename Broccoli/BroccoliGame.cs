@@ -8,7 +8,7 @@ using Broccoli.Engine;
 
 namespace Broccoli
 {
-	public class Game1 : Game
+	public class BroccoliGame : Game
 	{
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
@@ -16,11 +16,20 @@ namespace Broccoli
         public static int ScreenWidth;
         public static int ScreenHeight;
 
-        List<GameObject> _entities;
-        private Camera _camera;
-        private Player _player1;
+        /// <summary>
+        /// Client-only entities such as props
+        /// </summary>
+	    private List<GameObject> _clientEntities;
+        
+        /// <summary>
+        /// Remote entitities like bullet trails and other players
+        /// </summary>
+        private List<RemoteGameObject> _remoteEntities;
 
-        public Game1()
+        private Camera _camera;
+        private Player _localPlayer;
+
+        public BroccoliGame()
 		{
 			graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
@@ -66,12 +75,10 @@ namespace Broccoli
         protected override void LoadContent()
 		{
 			spriteBatch = new SpriteBatch(GraphicsDevice);
-            Texture2D texture = Content.Load<Texture2D>("box");
-            _player1 = new Player(new Rectangle(0, 0, 100, 100), texture);
-            _entities = new List<GameObject>()
-            {
-                _player1
-            };
+            var texture = Content.Load<Texture2D>("box");
+            _localPlayer = new Player(new Rectangle(0, 0, 100, 100), texture);
+		    _clientEntities = new List<GameObject>();
+		    _remoteEntities = new List<RemoteGameObject>();
             _camera = new Camera();
         }
 
@@ -80,16 +87,30 @@ namespace Broccoli
 
         }
 
-		protected override void Update(GameTime gameTime)
+		protected override async void Update(GameTime gameTime)
 		{
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
 
-            foreach(GameObject ent in _entities)
+            // tell server to send remote entities (send our remote entity ids)
+            // server sends remote entities
+            
+            // do remote entities need updating? if so do that here
+
+            // update player
+            _localPlayer.Update(gameTime, _clientEntities);
+
+            // update props and such
+            foreach (var ent in _clientEntities)
             {
-                ent.Update(gameTime, _entities);
+                ent.Update(gameTime, _clientEntities);
             }
-            _camera.Follow(_player1);
+
+            // send player position to server
+            // server sends back real client positions
+            // we adjust to compensate for lag and reposition all the entities
+
+            _camera.Follow(_localPlayer);
 
 			base.Update(gameTime);
 		}
@@ -97,13 +118,17 @@ namespace Broccoli
 		protected override void Draw(GameTime gameTime)
 		{
 			GraphicsDevice.Clear(Color.White);
-
-
+            
             spriteBatch.Begin(transformMatrix: _camera.Transform);
-            foreach (GameObject ent in _entities)
-            {
-                ent.Draw(gameTime, spriteBatch);
+            _localPlayer.Draw(gameTime, spriteBatch);
+		    foreach (var ent in _clientEntities)
+		    {
+		        ent.Draw(gameTime, spriteBatch);
             }
+		    foreach (var ent in _remoteEntities)
+		    {
+		        ent.Draw(gameTime, spriteBatch);
+		    }
             spriteBatch.End();
 
             base.Draw(gameTime);
