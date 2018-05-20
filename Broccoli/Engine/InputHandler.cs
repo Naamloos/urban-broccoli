@@ -37,7 +37,6 @@ namespace Broccoli.Engine
 			var gs = GamePad.GetState(PlayerIndex.One);
 
 			// Axis controls
-
 			if (ks.IsKeyDown(_keybinds.Up) && ks.IsKeyDown(_keybinds.Down))
 				YAxis = 0; // If both are pressed, they cancel out and Y is 0
 			else if (ks.IsKeyDown(_keybinds.Down))
@@ -60,6 +59,42 @@ namespace Broccoli.Engine
 				XAxis = gs.ThumbSticks.Left.X;
 			if (gs.ThumbSticks.Left.Y != 0)
 				YAxis = gs.ThumbSticks.Left.Y * -1f;
+
+			// Button controls
+			if (ks.IsKeyDown(_keybinds.Jump) || gs.IsButtonDown(Buttons.B))
+				Jump = true;
+			else
+				Jump = false;
+
+			if (ks.IsKeyDown(_keybinds.Block) || gs.IsButtonDown(Buttons.X))
+				Block = true;
+			else
+				Block = false;
+
+			if (ks.IsKeyDown(_keybinds.Attack1) || gs.IsButtonDown(Buttons.A))
+				Attack1 = true;
+			else
+				Attack1 = false;
+
+			if (ks.IsKeyDown(_keybinds.Attack2) || gs.IsButtonDown(Buttons.Y))
+				Attack2 = true;
+			else
+				Attack2 = false;
+
+			if (ks.IsKeyDown(_keybinds.Dash) || gs.IsButtonDown(Buttons.RightShoulder))
+				Dash = true;
+			else
+				Dash = false;
+
+			if (ks.IsKeyDown(_keybinds.Start) || gs.IsButtonDown(Buttons.Start))
+				Start = true;
+			else
+				Start = false;
+
+			if (ks.IsKeyDown(_keybinds.Select) || gs.IsButtonDown(Buttons.Back))
+				Select = true;
+			else
+				Select = false;;
 		}
 	}
 }
