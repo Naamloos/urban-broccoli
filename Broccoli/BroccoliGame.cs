@@ -161,9 +161,9 @@ namespace Broccoli
 			var sb = new StringBuilder();
 			sb.AppendLine("Input data");
 			sb.AppendLine($"X Axis: {_input.XAxis}, Y Axis: {_input.YAxis}");
-			sb.AppendLine($"Start: {_input.Start}, Select: {_input.Select}");
-			sb.AppendLine($"Atk1: {_input.Attack1}, Atk2: {_input.Attack2}");
-			sb.AppendLine($"Jump: {_input.Jump}, Block: {_input.Block}, Dash: {_input.Dash}");
+			sb.AppendLine($"Start: {_input.IsStartDown}, Select: {_input.IsSelectDown}");
+			sb.AppendLine($"Atk1: {_input.IsAttack1Down}, Atk2: {_input.IsAttack2Down}");
+			sb.AppendLine($"Jump: {_input.IsJumpDown}, Block: {_input.IsBlockDown}, Dash: {_input.IsDashDown}");
 
 			spriteBatch.DrawString(_debugfont, sb.ToString(), new Vector2(3, 3), Color.ForestGreen);
             spriteBatch.End();
