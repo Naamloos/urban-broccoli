@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Broccoli.Engine;
+using Broccoli.Engine.Input;
 
 namespace Broccoli.Engine.Entities
 {
