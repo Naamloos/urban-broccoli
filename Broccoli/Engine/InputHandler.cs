@@ -24,7 +24,12 @@ namespace Broccoli.Engine
 		public bool Attack2 { get; internal set; } = false;
 		public bool Block { get; internal set; } = false;
 
+		public InputType CurrentInput = InputType.Unknown;
+
 		private Keybinds _keybinds;
+
+		private KeyboardState OldKS;
+		private GamePadState OldGS;
 
 		public InputHandler(Keybinds keybinds)
 		{
@@ -35,6 +40,12 @@ namespace Broccoli.Engine
 		{
 			var ks = Keyboard.GetState();
 			var gs = GamePad.GetState(PlayerIndex.One);
+
+			if (ks != OldKS)
+				CurrentInput = InputType.Keyboard;
+
+			if (gs != OldGS)
+				CurrentInput = InputType.Gamepad;
 
 			// Axis controls
 			if (ks.IsKeyDown(_keybinds.Up) && ks.IsKeyDown(_keybinds.Down))
@@ -94,7 +105,18 @@ namespace Broccoli.Engine
 			if (ks.IsKeyDown(_keybinds.Select) || gs.IsButtonDown(Buttons.Back))
 				Select = true;
 			else
-				Select = false;;
+				Select = false;
+
+			OldGS = gs;
+			OldKS = ks;
 		}
+	}
+
+	public enum InputType
+	{
+		Keyboard,
+		Gamepad,
+		Touchscreen, // for possible future mobile ports
+		Unknown
 	}
 }

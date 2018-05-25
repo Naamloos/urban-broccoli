@@ -177,6 +177,7 @@ namespace Broccoli
 			spriteBatch.Begin();
 			var sb = new StringBuilder();
 			sb.AppendLine("Input data");
+			sb.AppendLine($"Input Device: {_localPlayer.Input.CurrentInput.ToString()}");
 			sb.AppendLine($"X Axis: {_localPlayer.Input.XAxis}, Y Axis: {_localPlayer.Input.YAxis}");
 			sb.AppendLine($"Start: {_localPlayer.Input.Start}, Select: {_localPlayer.Input.Select}");
 			sb.AppendLine($"Atk1: {_localPlayer.Input.Attack1}, Atk2: {_localPlayer.Input.Attack2}");
