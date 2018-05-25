@@ -21,8 +21,6 @@ namespace Broccoli
 
 		SpriteFont _debugfont;
 
-		InputHandler _input;
-
         /// <summary>
         /// Client-only entities such as props
         /// </summary>
@@ -35,6 +33,7 @@ namespace Broccoli
 
         private Camera _camera;
         private Player _localPlayer;
+        private SolidObject _testground;
 
         public BroccoliGame()
 		{
@@ -74,8 +73,16 @@ namespace Broccoli
 
         private void Fullscreen(bool fullscreen)
         {
-            graphics.PreferredBackBufferWidth = 1600;
-            graphics.PreferredBackBufferHeight = 900;
+            if(fullscreen)
+            {
+                graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
+                graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
+            }
+            else
+            {
+                graphics.PreferredBackBufferWidth = 1600;
+                graphics.PreferredBackBufferHeight = 900;
+            }
             graphics.IsFullScreen = fullscreen;
             graphics.ApplyChanges();
             ScreenHeight = GraphicsDevice.Viewport.Height;
@@ -86,13 +93,8 @@ namespace Broccoli
 		{
 			spriteBatch = new SpriteBatch(GraphicsDevice);
             var texture = Content.Load<Texture2D>("box");
-            _localPlayer = new Player(new Rectangle(0, 0, 100, 100), texture);
-		    _clientEntities = new List<GameObject>();
-		    _remoteEntities = new List<RemoteGameObject>();
-            _camera = new Camera();
-			_debugfont = Content.Load<SpriteFont>("Fonts/debug");
-
-			// Load keybinds from a file (if exists, else create file)
+            
+            // Load keybinds from a file (if exists, else create file)
 			Keybinds kb;
 			if (File.Exists("keybinds.json"))
 			{
@@ -104,7 +106,18 @@ namespace Broccoli
 				File.Create("keybinds.json").Close();
 				File.WriteAllText("keybinds.json", JsonConvert.SerializeObject(kb));
 			}
-			_input = new InputHandler(kb);
+            _localPlayer = new Player(texture,new Rectangle(0, 0, 100, 100), new InputHandler(kb));
+
+            _testground = new SolidObject(new Rectangle(0, 300, 500,50), texture);
+		    _clientEntities = new List<GameObject>()
+            {
+                _testground
+            };
+		    _remoteEntities = new List<RemoteGameObject>();
+            _camera = new Camera();
+			_debugfont = Content.Load<SpriteFont>("Fonts/debug");
+
+
         }
 
 		protected override void UnloadContent()
@@ -115,15 +128,17 @@ namespace Broccoli
 		protected override async void Update(GameTime gameTime)
 		{
 			// Update inbput before everything else so we get no input lag (by one frame. ok.)
-			_input.Update();
+			_localPlayer.Input.Update();
 
             // tell server to send remote entities (send our remote entity ids)
             // server sends remote entities
-            
+
             // do remote entities need updating? if so do that here
 
             // update player
+            
             _localPlayer.Update(gameTime, _clientEntities);
+            _camera.Follow(_localPlayer);
 
             // update props and such
             foreach (var ent in _clientEntities)
@@ -135,7 +150,7 @@ namespace Broccoli
             // server sends back real client positions
             // we adjust to compensate for lag and reposition all the entities
 
-            _camera.Follow(_localPlayer);
+            
 
 			base.Update(gameTime);
 		}
@@ -146,7 +161,9 @@ namespace Broccoli
             
             spriteBatch.Begin(transformMatrix: _camera.Transform);
             _localPlayer.Draw(gameTime, spriteBatch);
-		    foreach (var ent in _clientEntities)
+            
+
+            foreach (var ent in _clientEntities)
 		    {
 		        ent.Draw(gameTime, spriteBatch);
             }
@@ -160,12 +177,14 @@ namespace Broccoli
 			spriteBatch.Begin();
 			var sb = new StringBuilder();
 			sb.AppendLine("Input data");
-			sb.AppendLine($"X Axis: {_input.XAxis}, Y Axis: {_input.YAxis}");
-			sb.AppendLine($"Start: {_input.Start}, Select: {_input.Select}");
-			sb.AppendLine($"Atk1: {_input.Attack1}, Atk2: {_input.Attack2}");
-			sb.AppendLine($"Jump: {_input.Jump}, Block: {_input.Block}, Dash: {_input.Dash}");
+			sb.AppendLine($"X Axis: {_localPlayer.Input.XAxis}, Y Axis: {_localPlayer.Input.YAxis}");
+			sb.AppendLine($"Start: {_localPlayer.Input.Start}, Select: {_localPlayer.Input.Select}");
+			sb.AppendLine($"Atk1: {_localPlayer.Input.Attack1}, Atk2: {_localPlayer.Input.Attack2}");
+			sb.AppendLine($"Jump: {_localPlayer.Input.Jump}, Block: {_localPlayer.Input.Block}, Dash: {_localPlayer.Input.Dash}");
+			sb.AppendLine($"Velocity: {_localPlayer.Velocity}");
+			sb.AppendLine($"IVelocity: {_localPlayer.InputVelocity}");
 
-			spriteBatch.DrawString(_debugfont, sb.ToString(), new Vector2(3, 3), Color.ForestGreen);
+            spriteBatch.DrawString(_debugfont, sb.ToString(), new Vector2(3, 3), Color.ForestGreen);
             spriteBatch.End();
 
             base.Draw(gameTime);

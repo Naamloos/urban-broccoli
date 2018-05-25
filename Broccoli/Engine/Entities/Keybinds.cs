@@ -24,18 +24,18 @@ namespace Broccoli.Engine.Entities
 		public Keys Select = Keys.F1;
 
 		[JsonProperty("jump")]
-		public Keys Jump = Keys.Space;
+		public Keys Jump = Keys.X;
 
 		[JsonProperty("dash")]
-		public Keys Dash = Keys.LeftShift;
+		public Keys Dash = Keys.C;
 
 		[JsonProperty("atk1")]
 		public Keys Attack1 = Keys.Z;
 
 		[JsonProperty("atk2")]
-		public Keys Attack2 = Keys.X;
+		public Keys Attack2 = Keys.A;
 
 		[JsonProperty("block")]
-		public Keys Block = Keys.C;
+		public Keys Block = Keys.S;
 	}
 }
