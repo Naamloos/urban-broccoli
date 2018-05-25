@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Broccoli.Engine
+namespace Broccoli.Engine.Input
 {
 	/// <summary>
 	/// This class is for handling inputs from a sp
@@ -53,7 +53,7 @@ namespace Broccoli.Engine
 			this._keybinds = keybinds;
 		}
 
-		public void Update()
+		public virtual void Update()
 		{
 			var ks = Keyboard.GetState();
 			var gs = GamePad.GetState(PlayerIndex.One);
