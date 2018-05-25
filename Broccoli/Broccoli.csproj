@@ -50,7 +50,6 @@
     <Compile Include="Engine\Entities\RemoteGameObject.cs" />
     <Compile Include="Engine\Entities\SolidObject.cs" />
     <Compile Include="Engine\Input\InputHandler.cs" />
-    <Compile Include="Engine\Input\NetworkInputHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

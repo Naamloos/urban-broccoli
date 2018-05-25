@@ -1,11 +1,6 @@
 ﻿using Broccoli.Engine.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Broccoli.Engine.Input
 {
@@ -14,16 +9,16 @@ namespace Broccoli.Engine.Input
 	/// </summary>
 	public class InputHandler
 	{
-		public float XAxis { get; internal set; } = 0;
-		public float YAxis { get; internal set; } = 0;
+		public float XAxis { get; internal set; }
+		public float YAxis { get; internal set; }
 
-		public bool Start { get; internal set; } = false;
-		public bool Select { get; internal set; } = false;
-		public bool Jump { get; internal set; } = false;
-		public bool Dash { get; internal set; } = false;
-		public bool Attack1 { get; internal set; } = false;
-		public bool Attack2 { get; internal set; } = false;
-		public bool Block { get; internal set; } = false;
+		public bool Start { get; internal set; }
+		public bool Select { get; internal set; }
+		public bool Jump { get; internal set; }
+		public bool Dash { get; internal set; }
+		public bool Attack1 { get; internal set; }
+		public bool Attack2 { get; internal set; }
+		public bool Block { get; internal set; }
 
 		public bool StartPress => Start && !_oldstart;
 		public bool SelectPress => Select && !_oldselect;
@@ -33,20 +28,21 @@ namespace Broccoli.Engine.Input
 		public bool Attack2Press => Attack2 && !_oldattack2;
 		public bool BlockPress => Block && !_oldblock;
 
-		private bool _oldstart = false;
-		private bool _oldselect = false;
-		private bool _oldjump = false;
-		private bool _olddash = false;
-		private bool _oldattack1 = false;
-		private bool _oldattack2 = false;
-		private bool _oldblock = false;
+		private bool _oldstart;
+		private bool _oldselect;
+		private bool _oldjump;
+		private bool _olddash;
+		private bool _oldattack1;
+		private bool _oldattack2;
+		private bool _oldblock;
 
 		public InputType CurrentInput = InputType.Unknown;
 
-		private Keybinds _keybinds;
+		private readonly Keybinds _keybinds;
 
-		private KeyboardState OldKS;
-		private GamePadState OldGS;
+		//???
+		//private KeyboardState _oldKs;
+		//private GamePadState _oldGs;
 
 		public InputHandler(Keybinds keybinds)
 		{
@@ -69,67 +65,44 @@ namespace Broccoli.Engine.Input
 			else if (CurrentInput == InputType.Gamepad)
 				UpdateGamepad(gs);
 
-			OldKS = ks;
-			OldGS = gs;
+			//_oldKs = ks;
+			//_oldGs = gs;
 			UpdateOldValues();
 		}
 
 		private void UpdateKeyboard(KeyboardState ks)
 		{
 			// Axis controls
-			if (ks.IsKeyDown(_keybinds.Up) && ks.IsKeyDown(_keybinds.Down))
+			var upDown = ks.IsKeyDown(_keybinds.Up);
+			var downDown = ks.IsKeyDown(_keybinds.Down);
+			if (upDown && downDown)
 				YAxis = 0; // If both are pressed, they cancel out and Y is 0
-			else if (ks.IsKeyDown(_keybinds.Down))
+			else if (downDown)
 				YAxis = 1; // Down sets Y to 1
-			else if (ks.IsKeyDown(_keybinds.Up))
+			else if (upDown)
 				YAxis = -1; // Up sets Y to -1
 			else
 				YAxis = 0; // Else, nothing.
-
-			if (ks.IsKeyDown(_keybinds.Left) && ks.IsKeyDown(_keybinds.Right))
+			
+			var leftDown = ks.IsKeyDown(_keybinds.Left);
+			var rightDown = ks.IsKeyDown(_keybinds.Right);
+			if (leftDown && rightDown)
 				XAxis = 0; // If both are pressed, they cancel out and X is 0
-			else if (ks.IsKeyDown(_keybinds.Left))
+			else if (leftDown)
 				XAxis = -1; // Left sets X to -1
-			else if (ks.IsKeyDown(_keybinds.Right))
+			else if (rightDown)
 				XAxis = 1; // Right sets X to 1
 			else
 				XAxis = 0; // Else, nothing.
-
+			
 			// Button controls
-			if (ks.IsKeyDown(_keybinds.Jump))
-				Jump = true;
-			else
-				Jump = false;
-
-			if (ks.IsKeyDown(_keybinds.Block))
-				Block = true;
-			else
-				Block = false;
-
-			if (ks.IsKeyDown(_keybinds.Attack1))
-				Attack1 = true;
-			else
-				Attack1 = false;
-
-			if (ks.IsKeyDown(_keybinds.Attack2))
-				Attack2 = true;
-			else
-				Attack2 = false;
-
-			if (ks.IsKeyDown(_keybinds.Dash))
-				Dash = true;
-			else
-				Dash = false;
-
-			if (ks.IsKeyDown(_keybinds.Start))
-				Start = true;
-			else
-				Start = false;
-
-			if (ks.IsKeyDown(_keybinds.Select))
-				Select = true;
-			else
-				Select = false;
+			Jump = ks.IsKeyDown(_keybinds.Jump);
+			Block = ks.IsKeyDown(_keybinds.Block);
+			Attack1 = ks.IsKeyDown(_keybinds.Attack1);
+			Attack2 = ks.IsKeyDown(_keybinds.Attack2);
+			Dash = ks.IsKeyDown(_keybinds.Dash);
+			Start = ks.IsKeyDown(_keybinds.Start);
+			Select = ks.IsKeyDown(_keybinds.Select);
 		}
 
 		private void UpdateGamepad(GamePadState gs)
@@ -139,40 +112,13 @@ namespace Broccoli.Engine.Input
 			YAxis = gs.ThumbSticks.Left.Y * -1f;
 
 			// Button controls
-			if (gs.IsButtonDown(Buttons.B))
-				Jump = true;
-			else
-				Jump = false;
-
-			if (gs.IsButtonDown(Buttons.X))
-				Block = true;
-			else
-				Block = false;
-
-			if (gs.IsButtonDown(Buttons.A))
-				Attack1 = true;
-			else
-				Attack1 = false;
-
-			if (gs.IsButtonDown(Buttons.Y))
-				Attack2 = true;
-			else
-				Attack2 = false;
-
-			if (gs.IsButtonDown(Buttons.RightShoulder))
-				Dash = true;
-			else
-				Dash = false;
-
-			if (gs.IsButtonDown(Buttons.Start))
-				Start = true;
-			else
-				Start = false;
-
-			if (gs.IsButtonDown(Buttons.Back))
-				Select = true;
-			else
-				Select = false;
+			Jump = gs.IsButtonDown(Buttons.B);
+			Block = gs.IsButtonDown(Buttons.X);
+			Attack1 = gs.IsButtonDown(Buttons.A);
+			Attack2 = gs.IsButtonDown(Buttons.Y);
+			Dash = gs.IsButtonDown(Buttons.RightShoulder);
+			Start = gs.IsButtonDown(Buttons.Start);
+			Select = gs.IsButtonDown(Buttons.Back);
 		}
 
 		private void UpdateOldValues()
@@ -187,7 +133,7 @@ namespace Broccoli.Engine.Input
 		}
 	}
 
-	public enum InputType
+	public enum InputType : byte
 	{
 		Keyboard,
 		Gamepad,
