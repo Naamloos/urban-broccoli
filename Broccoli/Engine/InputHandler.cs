@@ -25,13 +25,13 @@ namespace Broccoli.Engine
 		public bool Attack2 { get; internal set; } = false;
 		public bool Block { get; internal set; } = false;
 
-		public bool StartPress { get { return Start && !_oldstart; } }
-		public bool SelectPress { get { return Select && !_oldselect; } }
-		public bool JumpPress { get { return Jump && !_oldjump; } }
-		public bool DashPress { get { return Dash && !_olddash; } }
-		public bool Attack1Press { get { return Attack1 && !_oldattack1; } }
-		public bool Attack2Press { get { return Attack2 && !_oldattack2; } }
-		public bool BlockPress { get { return Block && !_oldblock; } }
+		public bool StartPress => Start && !_oldstart;
+		public bool SelectPress => Select && !_oldselect;
+		public bool JumpPress => Jump && !_oldjump;
+		public bool DashPress => Dash && !_olddash;
+		public bool Attack1Press => Attack1 && !_oldattack1;
+		public bool Attack2Press => Attack2 && !_oldattack2;
+		public bool BlockPress => Block && !_oldblock;
 
 		private bool _oldstart = false;
 		private bool _oldselect = false;
