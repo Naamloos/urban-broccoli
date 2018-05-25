@@ -16,6 +16,7 @@ namespace Broccoli.Engine
 	{
 		public float XAxis { get; internal set; } = 0;
 		public float YAxis { get; internal set; } = 0;
+
 		public bool Start { get; internal set; } = false;
 		public bool Select { get; internal set; } = false;
 		public bool Jump { get; internal set; } = false;
@@ -23,6 +24,22 @@ namespace Broccoli.Engine
 		public bool Attack1 { get; internal set; } = false;
 		public bool Attack2 { get; internal set; } = false;
 		public bool Block { get; internal set; } = false;
+
+		public bool StartPress { get { return Start && !_oldstart; } }
+		public bool SelectPress { get { return Select && !_oldselect; } }
+		public bool JumpPress { get { return Jump && !_oldjump; } }
+		public bool DashPress { get { return Dash && !_olddash; } }
+		public bool Attack1Press { get { return Attack1 && !_oldattack1; } }
+		public bool Attack2Press { get { return Attack2 && !_oldattack2; } }
+		public bool BlockPress { get { return Block && !_oldblock; } }
+
+		private bool _oldstart = false;
+		private bool _oldselect = false;
+		private bool _oldjump = false;
+		private bool _olddash = false;
+		private bool _oldattack1 = false;
+		private bool _oldattack2 = false;
+		private bool _oldblock = false;
 
 		public InputType CurrentInput = InputType.Unknown;
 
@@ -54,9 +71,10 @@ namespace Broccoli.Engine
 
 			OldKS = ks;
 			OldGS = gs;
+			UpdateOldValues();
 		}
 
-		public void UpdateKeyboard(KeyboardState ks)
+		private void UpdateKeyboard(KeyboardState ks)
 		{
 			// Axis controls
 			if (ks.IsKeyDown(_keybinds.Up) && ks.IsKeyDown(_keybinds.Down))
@@ -114,7 +132,7 @@ namespace Broccoli.Engine
 				Select = false;
 		}
 
-		public void UpdateGamepad(GamePadState gs)
+		private void UpdateGamepad(GamePadState gs)
 		{
 			// Axis controls
 			XAxis = gs.ThumbSticks.Left.X;
@@ -155,6 +173,17 @@ namespace Broccoli.Engine
 				Select = true;
 			else
 				Select = false;
+		}
+
+		private void UpdateOldValues()
+		{
+			_oldstart = Start;
+			_oldselect = Select;
+			_oldjump = Jump;
+			_olddash = Dash;
+			_oldattack1 = Attack1;
+			_oldattack2 = Attack2;
+			_oldblock = Block;
 		}
 	}
 
