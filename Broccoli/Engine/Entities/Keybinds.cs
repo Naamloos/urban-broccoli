@@ -18,10 +18,10 @@ namespace Broccoli.Engine.Entities
 		public Keys Down = Keys.Down;
 
 		[JsonProperty("start")]
-		public Keys Start = Keys.Escape;
+		public Keys Start = Keys.Enter;
 
 		[JsonProperty("select")]
-		public Keys Select = Keys.F1;
+		public Keys Select = Keys.Escape;
 
 		[JsonProperty("jump")]
 		public Keys Jump = Keys.X;
