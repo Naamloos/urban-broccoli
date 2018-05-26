@@ -1,5 +1,4 @@
-﻿using Broccoli.Engine.Entities;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
@@ -30,7 +29,7 @@ namespace Broccoli
         /// <summary>
         /// Remote entitities like bullet trails and other players
         /// </summary>
-        private List<RemoteGameObject> _remoteEntities;
+        private RemoteGameObject[] _remoteEntities = new RemoteGameObject[ushort.MaxValue+1];
 
         private Camera _camera;
         private Player _localPlayer;

@@ -6,13 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Broccoli.Engine.Entities
+namespace Broccoli.Engine.Input
 {
     class SolidObject : GameObject
     {
         private float Width;
         private float Height;
-        public override Rectangle HitBox { get { return new Rectangle((int)Position.X, (int)Position.Y, (int)Width, (int)Height); } }
+        public override Rectangle HitBox => new Rectangle((int)Position.X, (int)Position.Y, (int)Width, (int)Height);
 
         public SolidObject(Rectangle size, Texture2D texture) : base(texture)
         {

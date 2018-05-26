@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Input;
 using Newtonsoft.Json;
 
-namespace Broccoli.Engine.Entities
+namespace Broccoli.Engine.Input
 {
 	public class Keybinds
 	{

@@ -2,23 +2,28 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UdpMistro;
 
-namespace Broccoli.Engine.Entities
+namespace Broccoli.Engine.Input
 {
-	public class GameObject
+	public abstract class GameObject : INetworkable
 	{
+	    public ushort Id;
+	    
         public Vector2 Position;
         public Vector2 Velocity;
         public Texture2D Texture;
         public bool Collision = true;
 		public virtual Rectangle HitBox => new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height);
 
-	    public GameObject(Texture2D texture)
+	    public GameObject(Texture2D texture, ushort id)
         {
             Texture = texture;
+            Id = id;
         }
 
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -84,5 +89,10 @@ namespace Broccoli.Engine.Entities
                 return false;
         }
         #endregion
-    }
+
+	    public virtual void Serialize(BinaryWriter writer)
+	    {
+	        writer.Write(Id);
+	    }
+	}
 }

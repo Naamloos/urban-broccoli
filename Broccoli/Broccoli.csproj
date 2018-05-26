@@ -43,12 +43,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Engine\Camera.cs" />
-    <Compile Include="Engine\Entities\GameObject.cs" />
     <Compile Include="Engine\Entities\Keybinds.cs" />
-    <Compile Include="Engine\Entities\Player.cs" />
+    <Compile Include="Engine\Entities\LocalPlayer.cs" />
     <Compile Include="BroccoliGame.cs" />
-    <Compile Include="Engine\Entities\RemoteGameObject.cs" />
-    <Compile Include="Engine\Entities\SolidObject.cs" />
     <Compile Include="Engine\Input\InputHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -71,6 +68,12 @@
     <None Include="app.config" />
     <None Include="app.manifest" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\UdpMistro\UdpMistro.csproj">
+      <Project>{8dce20b7-c4d7-4160-a249-f7af8f5a6665}</Project>
+      <Name>UdpMistro</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />

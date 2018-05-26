@@ -1,4 +1,4 @@
-﻿using Broccoli.Engine.Entities;
+﻿using Broccoli.Engine.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
@@ -7,49 +7,22 @@ namespace Broccoli.Engine.Input
 	/// <summary>
 	/// This class is for handling inputs from a sp
 	/// </summary>
-	public class InputHandler
+	public class InputHandler : Input
 	{
-		public float XAxis { get; internal set; }
-		public float YAxis { get; internal set; }
-
-		public bool Start { get; internal set; }
-		public bool Select { get; internal set; }
-		public bool Jump { get; internal set; }
-		public bool Dash { get; internal set; }
-		public bool Attack1 { get; internal set; }
-		public bool Attack2 { get; internal set; }
-		public bool Block { get; internal set; }
-
-		public bool StartPress => Start && !_oldstart;
-		public bool SelectPress => Select && !_oldselect;
-		public bool JumpPress => Jump && !_oldjump;
-		public bool DashPress => Dash && !_olddash;
-		public bool Attack1Press => Attack1 && !_oldattack1;
-		public bool Attack2Press => Attack2 && !_oldattack2;
-		public bool BlockPress => Block && !_oldblock;
-
-		private bool _oldstart;
-		private bool _oldselect;
-		private bool _oldjump;
-		private bool _olddash;
-		private bool _oldattack1;
-		private bool _oldattack2;
-		private bool _oldblock;
-
 		public InputType CurrentInput = InputType.Unknown;
 
 		private readonly Keybinds _keybinds;
-
-		//???
-		//private KeyboardState _oldKs;
-		//private GamePadState _oldGs;
 
 		public InputHandler(Keybinds keybinds)
 		{
 			this._keybinds = keybinds;
 		}
+		
+		//???
+		//private KeyboardState _oldKs;
+		//private GamePadState _oldGs;
 
-		public virtual void Update()
+		public override void Update()
 		{
 			var ks = Keyboard.GetState();
 			var gs = GamePad.GetState(PlayerIndex.One);
@@ -67,7 +40,7 @@ namespace Broccoli.Engine.Input
 
 			//_oldKs = ks;
 			//_oldGs = gs;
-			UpdateOldValues();
+			base.Update();
 		}
 
 		private void UpdateKeyboard(KeyboardState ks)
@@ -119,17 +92,6 @@ namespace Broccoli.Engine.Input
 			Dash = gs.IsButtonDown(Buttons.RightShoulder);
 			Start = gs.IsButtonDown(Buttons.Start);
 			Select = gs.IsButtonDown(Buttons.Back);
-		}
-
-		private void UpdateOldValues()
-		{
-			_oldstart = Start;
-			_oldselect = Select;
-			_oldjump = Jump;
-			_olddash = Dash;
-			_oldattack1 = Attack1;
-			_oldattack2 = Attack2;
-			_oldblock = Block;
 		}
 	}
 
