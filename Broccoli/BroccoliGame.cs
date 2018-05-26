@@ -34,7 +34,6 @@ namespace Broccoli
 
         private Camera _camera;
         private Player _localPlayer;
-        private SolidObject _testground;
 
         public BroccoliGame()
 		{
@@ -109,10 +108,10 @@ namespace Broccoli
 			}
             _localPlayer = new Player(texture,new Rectangle(0, 0, 100, 100), new InputHandler(kb));
 
-            _testground = new SolidObject(new Rectangle(0, 300, 500,50), texture);
-		    _clientEntities = new List<GameObject>()
+            _clientEntities = new List<GameObject>()
             {
-                _testground
+                new SolidObject(new Rectangle(0, 300, 500,50), texture),
+                new SolidObject(new Rectangle(500, 250, 50, 50), texture)
             };
 		    _remoteEntities = new List<RemoteGameObject>();
             _camera = new Camera();
@@ -183,8 +182,8 @@ namespace Broccoli
 			sb.AppendLine($"Start: {_localPlayer.Input.Start}, Select: {_localPlayer.Input.Select}");
 			sb.AppendLine($"Atk1: {_localPlayer.Input.Attack1}, Atk2: {_localPlayer.Input.Attack2}");
 			sb.AppendLine($"Jump: {_localPlayer.Input.Jump}, Block: {_localPlayer.Input.Block}, Dash: {_localPlayer.Input.Dash}");
-			sb.AppendLine($"Velocity: {_localPlayer.Velocity}");
-			sb.AppendLine($"IVelocity: {_localPlayer.InputVelocity}");
+			sb.AppendLine($"OverallVelocity: {_localPlayer.OverallVelocity}");
+			sb.AppendLine($"InputVelocity: {_localPlayer.InputVelocity}");
 
             spriteBatch.DrawString(_debugfont, sb.ToString(), new Vector2(3, 3), Color.ForestGreen);
             spriteBatch.End();

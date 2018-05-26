@@ -16,9 +16,11 @@ namespace Broccoli.Engine.Entities
         private float Height;
         public Vector2 InputVelocity = Vector2.Zero;
         public override Rectangle HitBox { get { return new Rectangle((int)Position.X, (int)Position.Y, (int)Width, (int)Height); } }
+        public Vector2 OverallVelocity { get { return InputVelocity + Velocity + new Vector2(0, _gravity); } }
         public InputHandler Input;
 
         private float _speed;
+        private float _gravity;
 
         public Player(Texture2D texture,Rectangle size,InputHandler input) : base(texture)
         {
@@ -45,58 +47,45 @@ namespace Broccoli.Engine.Entities
         
         public override void Update(GameTime gameTime, List<GameObject> entities)
         {
+            Vector2 pos = Position;
             float delta = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+            _gravity += 0.5f;
 
-            if(Input.XAxis < 0.1 && Input.XAxis > -0.1)
-                InputVelocity.X /= 1.1f;
+            if ((Input.XAxis < 0.1 && Input.XAxis > -0.1) && InputVelocity.X != 0)
+                InputVelocity.X -= (InputVelocity.X / 3.5f) / 10 * delta;
             if (InputVelocity.X < 0.05 && InputVelocity.X > -0.05)
                 InputVelocity.X = 0;
 
             InputVelocity.X += Input.XAxis * _speed;
-            InputVelocity.X = MathHelper.Clamp(InputVelocity.X,-_speed,_speed);
+            InputVelocity.X = MathHelper.Clamp(InputVelocity.X, -_speed, _speed);
+
+
+            if ((Input.YAxis < 0.1 && Input.YAxis > -0.1) && InputVelocity.Y != 0)
+                InputVelocity.Y -= (InputVelocity.Y / 3.5f) / 10 * delta;
+            if (InputVelocity.Y < 0.05 && InputVelocity.Y > -0.05)
+                InputVelocity.Y = 0;
+
+            InputVelocity.Y += Input.YAxis * _speed;
+            InputVelocity.Y = MathHelper.Clamp(InputVelocity.Y, -_speed, _speed);
+
+            if (Input.Jump)
+                InputVelocity.Y = -10;
 
             foreach (var sprite in entities)
             {
                 if (sprite == this)
                     continue;
-                if ((Velocity.X > 0 && IsTouchingLeft(sprite)))
-                {
 
-                    this.Velocity.X = 0;
-                    InputVelocity.X = sprite.HitBox.Left - HitBox.Width;
-                }
+                if (sprite.Collision == true && Collision == true)
+                {   
 
-                if ((Velocity.X < 0 && IsTouchingRight(sprite)))
-                {
-                    this.Velocity.X = 0;
-                    InputVelocity.X = sprite.HitBox.Right;
                 }
             }
 
-            Position += ((Velocity / 10) * delta) + ((InputVelocity / 10) * delta);
-            // need to do these seperately otherwise the player will spaz out and get stuck in corners
-            foreach (var sprite in entities)
-            {
-                if (sprite == this)
-                    continue;
-
-                if ((Velocity.Y < 0 && IsTouchingBottom(sprite)))
-                {
-                    this.Velocity.Y = 0;
-                    InputVelocity.Y = sprite.HitBox.Bottom;
-                }
-
-                if ((Velocity.Y > 0 && IsTouchingTop(sprite)))
-                {
-                    this.Velocity.Y = 0;
-                    InputVelocity.Y = sprite.HitBox.Top - HitBox.Height;
-                }
-
-            }
-
-            Position += 
-                (((Velocity) / 10) * delta)+
-                ((InputVelocity / 10) * delta);
+            pos += Velocity / 10 * delta;
+            pos += InputVelocity / 10 * delta;
+            pos += new Vector2(0, _gravity) / 10 * delta;
+            Position = pos;
         }
     }
 }
