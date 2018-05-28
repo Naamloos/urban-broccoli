@@ -59,6 +59,8 @@ namespace Broccoli.Engine.Input
 			else if (gs.IsButtonDown(Buttons.Start))
 				CurrentInput = InputType.Gamepad;
 
+            UpdateOldValues();
+
 			// possibly replacable with switch statement
 			if (CurrentInput == InputType.Keyboard)
 				UpdateKeyboard(ks);
@@ -67,7 +69,7 @@ namespace Broccoli.Engine.Input
 
 			//_oldKs = ks;
 			//_oldGs = gs;
-			UpdateOldValues();
+			
 		}
 
 		private void UpdateKeyboard(KeyboardState ks)

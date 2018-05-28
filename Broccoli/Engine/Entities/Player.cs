@@ -43,6 +43,7 @@ namespace Broccoli.Engine.Entities
 
         public override void Update(GameTime gameTime, List<GameObject> entities)
         {
+            
             float delta = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
             Move(delta);
@@ -54,8 +55,8 @@ namespace Broccoli.Engine.Entities
 
         private void Move(float delta)
         {
-            if(Input.CurrentInput != InputType.Unknown)
             _gravity += 0.5f;
+            _gravity = MathHelper.Clamp(_gravity, 0, 40);
 
             if ((Input.XAxis < 0.1 && Input.XAxis > -0.1) && InputVelocity.X != 0)
                 InputVelocity.X -= (InputVelocity.X / 3.5f) / 10 * delta;
@@ -73,7 +74,7 @@ namespace Broccoli.Engine.Entities
             InputVelocity.Y += Input.YAxis * _speed;
             InputVelocity.Y = MathHelper.Clamp(InputVelocity.Y, -_speed, _speed);
 
-            if (Input.Jump)
+            if (Input.JumpPress)
                 InputVelocity.Y = -10;
         }
 
