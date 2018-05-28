@@ -19,7 +19,6 @@ namespace Broccoli.Engine.Entities
         public InputHandler Input;
         private float Speed;
         public int JumpCount = 2;
-        private bool _jumped = false;
 
         public Player(Texture2D texture,Rectangle size,InputHandler input) : base(texture)
         {
@@ -46,7 +45,6 @@ namespace Broccoli.Engine.Entities
 
         public override void Update(GameTime gameTime, List<GameObject> entities)
         {
-            
             float delta = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
             Move(delta);
@@ -58,17 +56,10 @@ namespace Broccoli.Engine.Entities
 
         private void Move(float delta)
         {
-            if (Input.Jump && JumpCount > 0)
-                InputVelocity.Y = -1.1f*delta;
-
-            if(Input.JumpPress && JumpCount > 0)
-            {
-                JumpCount -= 1;
-                _gravity = 0;
-            }
+            //remake jump
 
             if(Input.Jump && InputVelocity.Y < 0)
-                _gravity += 0.025f*delta;
+                _gravity += 0.025f * delta;
             else
                 _gravity += 0.05f * delta;
             _gravity = MathHelper.Clamp(_gravity, 0, 40);

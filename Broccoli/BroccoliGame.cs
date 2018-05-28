@@ -80,7 +80,8 @@ namespace Broccoli
             }
             else
             {
-
+                graphics.PreferredBackBufferWidth = 1600;
+                graphics.PreferredBackBufferHeight = 900;
             }
             graphics.IsFullScreen = fullscreen;
             graphics.ApplyChanges();
@@ -175,7 +176,7 @@ namespace Broccoli
 			// Debug data.
 			spriteBatch.Begin();
 			var sb = new StringBuilder();
-			sb.AppendLine("Input data");
+			sb.AppendLine((1/gameTime.ElapsedGameTime.TotalSeconds).ToString());
 			sb.AppendLine($"Input Device: {_localPlayer.Input.CurrentInput.ToString()}");
 			sb.AppendLine($"X Axis: {_localPlayer.Input.XAxis}, Y Axis: {_localPlayer.Input.YAxis}");
 			sb.AppendLine($"Start: {_localPlayer.Input.Start}, Select: {_localPlayer.Input.Select}");
