@@ -13,10 +13,14 @@ namespace Broccoli.Engine.Entities
         public Vector2 Position;
         public Vector2 Velocity;
         public Texture2D Texture;
+        public Vector2 InputVelocity = Vector2.Zero;
+        public float _gravity;
         public bool Collision = true;
 		public virtual Rectangle HitBox => new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height);
+        public virtual Vector2 OverallVelocity { get { return InputVelocity + Velocity + new Vector2(0, _gravity); } }
 
-	    public GameObject(Texture2D texture)
+
+        public GameObject(Texture2D texture)
         {
             Texture = texture;
         }
@@ -36,7 +40,7 @@ namespace Broccoli.Engine.Entities
         {
             if (this.Collision && entity.Collision)
             {
-                return HitBox.Right + Velocity.X > entity.HitBox.Left &&
+                return HitBox.Right + OverallVelocity.X > entity.HitBox.Left &&
                     HitBox.Left < entity.HitBox.Left &&
                     HitBox.Bottom > entity.HitBox.Top &&
                     HitBox.Top < entity.HitBox.Bottom;
@@ -49,7 +53,7 @@ namespace Broccoli.Engine.Entities
         {
             if (this.Collision && entity.Collision)
             {
-                return HitBox.Left + Velocity.X < entity.HitBox.Right &&
+                return HitBox.Left + OverallVelocity.X < entity.HitBox.Right &&
                     HitBox.Right > entity.HitBox.Right &&
                     HitBox.Bottom > entity.HitBox.Top &&
                     HitBox.Top < entity.HitBox.Bottom;
@@ -62,7 +66,7 @@ namespace Broccoli.Engine.Entities
         {
             if (this.Collision && entity.Collision)
             {
-                return HitBox.Bottom + Velocity.Y > entity.HitBox.Top &&
+                return HitBox.Bottom + OverallVelocity.Y > entity.HitBox.Top &&
                     HitBox.Top < entity.HitBox.Top &&
                     HitBox.Right > entity.HitBox.Left &&
                     HitBox.Left < entity.HitBox.Right;
@@ -75,7 +79,7 @@ namespace Broccoli.Engine.Entities
         {
             if (this.Collision && entity.Collision)
             {
-                return HitBox.Top + Velocity.Y < entity.HitBox.Bottom &&
+                return HitBox.Top + OverallVelocity.Y < entity.HitBox.Bottom &&
                     HitBox.Bottom > entity.HitBox.Bottom &&
                     HitBox.Right > entity.HitBox.Left &&
                     HitBox.Left < entity.HitBox.Right;
