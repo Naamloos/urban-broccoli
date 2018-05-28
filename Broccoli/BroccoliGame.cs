@@ -80,8 +80,7 @@ namespace Broccoli
             }
             else
             {
-                graphics.PreferredBackBufferWidth = 1600;
-                graphics.PreferredBackBufferHeight = 900;
+
             }
             graphics.IsFullScreen = fullscreen;
             graphics.ApplyChanges();
@@ -184,6 +183,7 @@ namespace Broccoli
 			sb.AppendLine($"Jump: {_localPlayer.Input.Jump}, Block: {_localPlayer.Input.Block}, Dash: {_localPlayer.Input.Dash}");
 			sb.AppendLine($"OverallVelocity: {_localPlayer.OverallVelocity}");
 			sb.AppendLine($"InputVelocity: {_localPlayer.InputVelocity}");
+			sb.AppendLine($"JumpCount: {_localPlayer.JumpCount}");
 
             spriteBatch.DrawString(_debugfont, sb.ToString(), new Vector2(3, 3), Color.ForestGreen);
             spriteBatch.End();

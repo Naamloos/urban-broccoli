@@ -15,8 +15,11 @@ namespace Broccoli.Engine.Entities
         private float Width;
         private float Height;
         public override Rectangle HitBox { get { return new Rectangle((int)Position.X, (int)Position.Y, (int)Width, (int)Height); } }
+        public bool IsOnGround { get; private set; }
         public InputHandler Input;
-        private float _speed;
+        private float Speed;
+        public int JumpCount = 2;
+        private bool _jumped = false;
 
         public Player(Texture2D texture,Rectangle size,InputHandler input) : base(texture)
         {
@@ -25,7 +28,7 @@ namespace Broccoli.Engine.Entities
             Position = size.Location.ToVector2();
             Texture = texture;
             Input = input;
-            _speed = 7;
+            Speed = 7;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -55,7 +58,19 @@ namespace Broccoli.Engine.Entities
 
         private void Move(float delta)
         {
-            _gravity += 0.5f;
+            if (Input.Jump && JumpCount > 0)
+                InputVelocity.Y = -1.1f*delta;
+
+            if(Input.JumpPress && JumpCount > 0)
+            {
+                JumpCount -= 1;
+                _gravity = 0;
+            }
+
+            if(Input.Jump && InputVelocity.Y < 0)
+                _gravity += 0.025f*delta;
+            else
+                _gravity += 0.05f * delta;
             _gravity = MathHelper.Clamp(_gravity, 0, 40);
 
             if ((Input.XAxis < 0.1 && Input.XAxis > -0.1) && InputVelocity.X != 0)
@@ -63,19 +78,8 @@ namespace Broccoli.Engine.Entities
             if (InputVelocity.X < 0.05 && InputVelocity.X > -0.05)
                 InputVelocity.X = 0;
 
-            InputVelocity.X += Input.XAxis * _speed;
-            InputVelocity.X = MathHelper.Clamp(InputVelocity.X, -_speed, _speed);
-
-            if ((Input.YAxis < 0.1 && Input.YAxis > -0.1) && InputVelocity.Y != 0)
-                InputVelocity.Y -= (InputVelocity.Y / 3.5f) / 10 * delta;
-            if (InputVelocity.Y < 0.05 && InputVelocity.Y > -0.05)
-                InputVelocity.Y = 0;
-
-            InputVelocity.Y += Input.YAxis * _speed;
-            InputVelocity.Y = MathHelper.Clamp(InputVelocity.Y, -_speed, _speed);
-
-            if (Input.JumpPress)
-                InputVelocity.Y = -10;
+            InputVelocity.X += Input.XAxis * Speed;
+            InputVelocity.X = MathHelper.Clamp(InputVelocity.X, -Speed, Speed);
         }
 
         private Vector2 Collide(float delta,List<GameObject> entities)
@@ -118,12 +122,15 @@ namespace Broccoli.Engine.Entities
 
                 if ((OverallVelocity.Y > 0 && IsTouchingTop(sprite)))
                 {
+                    JumpCount = 2;
+                    IsOnGround = true;
                     _gravity = 0;
                     Velocity.Y = 0;
                     InputVelocity.Y = 0;
                     pos.Y = sprite.HitBox.Top - HitBox.Height;
                 }
-
+                else
+                    IsOnGround = false;
             }
             return pos;
         }
