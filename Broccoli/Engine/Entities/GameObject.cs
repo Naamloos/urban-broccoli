@@ -12,13 +12,17 @@ namespace Broccoli.Engine.Entities
 	{
         public Vector2 Position;
         public Vector2 Velocity;
+        public Vector2 Gravity;
         public Texture2D Texture;
-        public Vector2 InputVelocity = Vector2.Zero;
-        public float _gravity;
         public bool Collision = true;
 		public virtual Rectangle HitBox => new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height);
-        public virtual Vector2 OverallVelocity { get { return InputVelocity + Velocity + new Vector2(0, _gravity); } }
+        public virtual Vector2 OverallVelocity { get { return Velocity + Gravity; } }
 
+        public virtual void ResetVelocity()
+        {
+            Velocity = Vector2.Zero;
+            Gravity = Vector2.Zero;
+        }
 
         public GameObject(Texture2D texture)
         {
