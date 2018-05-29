@@ -9,7 +9,7 @@ using System.Text;
 using System.IO;
 using Newtonsoft.Json;
 using Broccoli.Engine.Input;
-
+//titty
 namespace Broccoli
 {
 	public class BroccoliGame : Game
@@ -182,9 +182,9 @@ namespace Broccoli
 			sb.AppendLine($"Start: {_localPlayer.Input.Start}, Select: {_localPlayer.Input.Select}");
 			sb.AppendLine($"Atk1: {_localPlayer.Input.Attack1}, Atk2: {_localPlayer.Input.Attack2}");
 			sb.AppendLine($"Jump: {_localPlayer.Input.Jump}, Block: {_localPlayer.Input.Block}, Dash: {_localPlayer.Input.Dash}");
-			sb.AppendLine($"OverallVelocity: {_localPlayer.OverallVelocity}");
-			sb.AppendLine($"InputVelocity: {_localPlayer.InputVelocity}");
-			sb.AppendLine($"JumpCount: {_localPlayer.JumpCount}");
+			sb.AppendLine($"Velocity: {_localPlayer.Velocity}");
+			sb.AppendLine($"Gravity: {_localPlayer.Gravity}");
+            sb.AppendLine($"JumpCount: {_localPlayer.JumpCount}");
 
             spriteBatch.DrawString(_debugfont, sb.ToString(), new Vector2(3, 3), Color.ForestGreen);
             spriteBatch.End();
