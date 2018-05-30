@@ -16,13 +16,14 @@ namespace Broccoli.Engine.Entities
         private readonly float Height;
         public override Rectangle HitBox { get { return new Rectangle((int)Position.X, (int)Position.Y, (int)Width, (int)Height); } }
 
+        public int Weight;
         public bool IsOnGround { get; private set; }
         public InputHandler Input;
         private readonly float Speed;
         public int JumpCount;
         private bool _canJump = true;
 
-        public Player(Texture2D texture,Rectangle size,InputHandler input) : base(texture)
+        public Player(Texture2D texture, Rectangle size, InputHandler input) : base(texture)
         {
             Width = size.Width;
             Height = size.Height;
@@ -30,6 +31,7 @@ namespace Broccoli.Engine.Entities
             Texture = texture;
             Input = input;
             Speed = 700;
+            Weight = 1;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -61,9 +63,9 @@ namespace Broccoli.Engine.Entities
         private void Move(float delta)
         {
             if (Input.Jump && Velocity.Y < 0)
-                Gravity.Y += 2000 * (float)(Math.Pow((double)delta, 2));
+                Gravity.Y += (2000 * (float)(Math.Pow((double)delta, 2))) * Weight;
             else
-                Gravity.Y += 8000 * (float)(Math.Pow((double)delta, 2));
+                Gravity.Y += (8000 * (float)(Math.Pow((double)delta, 2))) * Weight;
 
             if (Input.JumpPress && JumpCount >= 1)
             {

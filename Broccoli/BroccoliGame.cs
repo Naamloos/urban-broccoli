@@ -106,7 +106,7 @@ namespace Broccoli
 				File.Create("keybinds.json").Close();
 				File.WriteAllText("keybinds.json", JsonConvert.SerializeObject(kb));
 			}
-            _localPlayer = new Player(texture,new Rectangle(0, 0, 100, 100), new InputHandler(kb));
+            _localPlayer = new Player(texture, new Rectangle(0, 0, 100, 100), new InputHandler(kb));
 
             _clientEntities = new List<GameObject>()
             {
@@ -120,7 +120,7 @@ namespace Broccoli
 
         }
 
-		protected override void UnloadContent()
+        protected override void UnloadContent()
 		{
 
         }
